@@ -1,10 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import AddTodo from './components/AddTodo'
 import TodoList from './components/TodoList'
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  // Load todos from localStorage on initial render
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem('todos');
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
+
+  // Save todos to localStorage whenever todos change
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   // Generate unique ID for new todos
   const generateId = () => {
